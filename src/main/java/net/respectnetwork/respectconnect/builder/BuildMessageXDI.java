@@ -81,7 +81,7 @@ public class BuildMessageXDI extends javax.servlet.http.HttpServlet implements j
 
 		// create message HTML
 
-		Message message = new MessageEnvelope().getMessage(requestingParty, true);
+		Message message = new MessageEnvelope().createMessage(requestingParty);
 
 		message.setToAuthority(TO_AUTHORITY);
 		message.setMessageType(MESSAGE_TYPE);
