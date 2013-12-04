@@ -36,7 +36,7 @@ public class BuildLinkContractTemplateXDI extends javax.servlet.http.HttpServlet
 
 	private static final long serialVersionUID = -2033109040103002340L;
 
-	public static final XDI3Segment TO_ADDRESS = XDI3Segment.create("{$to}");
+	public static final XDI3Segment TO_PEER_ROOT_XRI = XDI3Segment.create("{$to}");
 	public static final XDI3Segment MESSAGE_TYPE = XDI3Segment.create("$connect[$v]#0$xdi[$v]#1$msg");
 	public static final XDI3Segment OPERATION_XRI = XDI3Segment.create("$set{$do}");
 

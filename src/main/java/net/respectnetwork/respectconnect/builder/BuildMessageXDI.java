@@ -29,13 +29,13 @@ public class BuildMessageXDI extends javax.servlet.http.HttpServlet implements j
 
 	private static final long serialVersionUID = 2395655719203845949L;
 
-	public static final XDI3Segment TO_AUTHORITY = XDI3Segment.create("{$to}");
+	public static final XDI3Segment TO_PEER_ROOT_XRI = XDI3Segment.create("{$to}");
 	public static final XDI3Segment MESSAGE_TYPE = XDI3Segment.create("$connect[$v]#0$xdi[$v]#1$msg");
 	public static final XDI3Segment OPERATION_XRI = XDI3Segment.create("$set{$do}");
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		this.doPost(request, response);
 	}
 
@@ -83,7 +83,7 @@ public class BuildMessageXDI extends javax.servlet.http.HttpServlet implements j
 
 		Message message = new MessageEnvelope().createMessage(requestingParty);
 
-		message.setToAuthority(TO_AUTHORITY);
+		message.setToPeerRootXri(TO_PEER_ROOT_XRI);
 		message.setMessageType(MESSAGE_TYPE);
 
 		message.createOperation(OPERATION_XRI, linkContractTemplateAddress);
