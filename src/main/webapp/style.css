@@ -1,6 +1,6 @@
 * {
 	font-family: Calibri, Arial, Helvetica, sans-serif;
-	font-size: 12pt;
+	font-size: 10pt;
 }
 
 body {
@@ -34,14 +34,14 @@ form {
 }
 
 #appname {
-	font-size: 16pt;
+	font-size: 12pt;
 	font-weight: bold;
 	padding-left: 20px;
 	padding-top: 40px;
 }
 
 h1 {
-	font-size: 2em;
+	font-size: 1.5em;
 	font-weight: bold;
 	width: 100%;
 	border-top: 5px solid black;

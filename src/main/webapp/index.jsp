@@ -8,10 +8,71 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Respect Connect Button Builder</title>
 	<link rel="stylesheet" target="_blank" href="style.css" TYPE="text/css" MEDIA="screen">
+	<script type="text/javascript" src="xdi.js"></script>
 	<script type="text/javascript" src="jquery-2.0.3.min.js"></script>
 	<script type="text/javascript" src="lodash.compat.min.js"></script>
 
 	<script type="text/javascript">
+
+		function clickdiscovercloudnumberfromprod() {
+
+			xdi.discovery(
+
+				$('#requestingparty').val(),
+				function(discovery) {
+					$('#requestingparty').val(discovery.cloudNumber());
+					$('#xdiendpoint').val(discovery.xdiEndpoint());
+				},
+				function(errorText) {
+					$('#requestingparty').val(errorText);
+				},
+				"http://mycloud.neustar.biz:12220/"
+			);
+		}
+
+		function clickdiscovercloudnumberfromote() {
+
+			xdi.discovery(
+
+				$('#requestingparty').val(),
+				function(discovery) {
+					$('#requestingparty').val(discovery.cloudNumber());
+					$('#xdiendpoint').val(discovery.xdiEndpoint());
+				},
+				function(errorText) {
+					$('#requestingparty').val(errorText);
+				},
+				"http://mycloud-ote.neustar.biz:12220/"
+			);
+		}
+
+		function clickbuildlinkcontracttemplateaddress() {
+
+			$('#linkcontracttemplateaddress').val("{$from}" + $('#requestingparty').val() + "+registration" + "[$do]" + "!:uuid:" + xdi.util.guid());
+		}
+
+		function clickretrieveprivatekey() {
+
+			var message = xdi.message($('#requestingparty').val());
+			message.toAddress("(" + $('#requestingparty').val() + ")");
+			message.linkContract("$do");
+			message.secretToken($('#secrettoken').val());
+			message.operation("$get", "$msg$sig$keypair<$private><$key>");
+
+			message.send(
+
+				$('#xdiendpoint').val(),
+				function(response) {
+					var context = response.root().context("$msg$sig$keypair<$private><$key>&");
+					var literal = context === null ? null : context.literal();
+					var data = literal === null ? null : literal.data();
+					$("#privatekey").val(data);
+				},
+				function(errorText) {
+					$("#privatekey").val(errorText);
+				}
+			);
+		}
 
 		function clickbuildxdi() {
 
@@ -68,8 +129,20 @@
 			});
 		}
 
+		function clickinstalllinkcontracttemplatexdi() {
+
+		}
+
+		function clickinstallmetalinkcontractxdi() {
+		
+		}
+
 		$(document).ready(function() {
-	
+
+			$("#buttondiscovercloudnumberfromprod").on("click", clickdiscovercloudnumberfromprod);
+			$("#buttondiscovercloudnumberfromote").on("click", clickdiscovercloudnumberfromote);
+			$("#buttonbuildlinkcontracttemplateaddress").on("click", clickbuildlinkcontracttemplateaddress);
+			$("#buttonretrieveprivatekey").on("click", clickretrieveprivatekey);
 			$("#buttonbuildxdi").on("click", clickbuildxdi);
 			$("#buttonbuildmessagehtml").on("click", clickbuildmessagehtml);
 			$("#buttoninstalllinkcontracttemplatexdi").on("click", clickinstalllinkcontracttemplatexdi);
@@ -94,7 +167,7 @@
 	<div id="main">
 
 	<% if (request.getAttribute("error") != null) { %>
-			
+
 		<p style="font-family: monospace; white-space: pre; color: red;"><%= request.getAttribute("error") != null ? request.getAttribute("error") : "" %></p>
 
 	<% } %>
@@ -105,13 +178,30 @@
 
 		<table cellspacing="0" cellpadding="5" border="0">
 		<tr>
-		<td>Requesting Party:</td><td><input type="text" name="requestingParty" size="80" value="[@]!:uuid:e0178407-b7b6-43f9-e017-8407b7b643f9"></td>
+		<td>Requesting Party:</td>
+		<td>
+		<input type="text" name="requestingParty" id="requestingparty" size="80" value="@acmebread">
+		<input type="hidden" name="xdiEndpoint" id="xdiendpoint"><br>
+		<input type="button" id="buttondiscovercloudnumberfromprod" value="Discover Cloud Number from PROD">
+		<input type="button" id="buttondiscovercloudnumberfromote" value="Discover Cloud Number from OTE">
+		</td>
 		</tr>
 		<tr>
-		<td>Private Key for Signature:</td><td><textarea name="privateKey" cols="50" rows="3">MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCqrkJswChCygqqOpjeEtYZ7GEEXwcVCAFu1D30qfk3eo7yVWRtCzYMMQGxbvkZ05aTqBtkqpOOE0O0u7uib36pw3TRl8vQPfBjXYvI/sy4TQv8HuAQopsjrawOlU04vdt+bfh6BR/7f1bJcUv3+Okh9fEoAQzzNWqcM8X+cvLGRt1Vv5u4DOFEa5lsK5/E50DKQBU+QW9P/+RZaw0bdC/H1xf9EcaGhsmpwKIW+TLBKLRwDeFhUXt7ILzrZawmytDTZ/Nfb/t0R5gKncyhxeeamFe2gebDOjLh7bhLdbSbBqe4dQX2NUe9QG4dQf4jy22V8Y2zjlJEyfn0pELurAn9AgMBAAECggEBAIfmVHFu1x/G65L7MTixWtQtSFpIp8TxKOLsD6C9rfekmCkQIPRKFvDCHI0AxUrxFFXhZl5TC0X2xNQlHpOJnxrgzCUObnQSvVMA6wpRBwRAJKjMlK/qKQjRgcviySfC0//o5A2UAxEnJR0kHs8E2+v0fd3SaFNGVuqktqORNwjzmgKBOqWk2uhbThWBqJEYdeqljFOGobiDugHBWfGEHNQIG7YEqKzMz/5Q6NVkPNQtDgBa4+21tyLEJ49wO8FG/Sxjq6y+5mY13SQ0fM617q8x1IbW2kzGu3P63CXwUw1izGEvnLjRU7wIjS2eLPGWMsUCGNGV/C72cU8ID0JVZKkCgYEA4Rdm57JOoDaJ2WfDnth2ED57ou7awY8h4rryiviqGo3RTAVcF5FJBY4k4ZpyG230PyrHEhhB6lxCkvEc+jo+yYqgK1KmppfZAQ2jcl8/PTWkVwirF8YQM3Kb9DayxDbM83kEzGmXrKEcMuMhJ/3BWVPwQOT8IZ4KBBkow6kjnX8CgYEAwh4q4FuUUNNfefn8xRtqgzwHhm3Nnj6+4/hjq2ZuhvbnvpLpQDv8qSi47TULG6PjVUl4wB0G8q1UOliEgwQhhN5lhpBZqFqo4Alrz7iUALkTvESPt2Sxd+aZngHhmJjJu5tTd4I+i92R+HT0CHR1p3Lfm2u0CrvfIZTUpVbqjoMCgYEAsodpKyQVkKUxOKpAUeDF46RrU5O3FgZ8jeRRM0B/SohpFK67mEW3cRyIzBc/odnX+7HmKsfqoAOFGh77KMzBuACngTUQ0NlnWJqEpNY+xkGhkxZg/X4uo1+nqk8oAtCkRggacjbeAiHWx9W2Go39qOgWiqIUCGXc89swpd+lS+kCgYB4t7IKXGlb6ldRz7j2CxquCkLTwq1AX9zugKXbDZRmsl1kEpCjtapmuEBoo7gItF7Hxy0kq+iKOmhK8IlXwNXnfza7/EEFhXvH95PoVe0UlgRD7I9DiYcj/XBC5wCYmUu7M9kwVPr4mA4S6QhpyaLxQ2rziIMqubMFezzSpb6waQKBgQC/AmYnjmeToGgGigYfX6g4L5qjs4+7fPSxDpWHWDTMqP8bDlxW2QFY/OkesbU177OaoayC3TIT+GOx/h15lbbCgJcGo1o7iWK5W4YXvbE4DpHfX/BQvMsTCEbuMVHcrOMvRlDiA52P3LHiq4N/Ky2lBqw2pg5kANDvZonmbxElmQ==</textarea></td>
+		<td>Address of Link Contract Template:</td>
+		<td>
+		<input type="text" name="linkContractTemplateAddress" id="linkcontracttemplateaddress" size="80"><br>
+		<input type="button" id="buttonbuildlinkcontracttemplateaddress" value="Build Link Contract Template Address">
+		</td>
 		</tr>
 		<tr>
-		<td>Address of Link Contract Template:</td><td><input type="text" name="linkContractTemplateAddress" size="80" value="{$from}[@]!:uuid:e0178407-b7b6-43f9-e017-8407b7b643f9+registration$do"></td>
+		<td>Secret Token:</td><td><input type="text" name="secretToken" id="secrettoken" size="80" value="bestbread"></td>
+		</tr>
+		<tr>
+		<td>Private Key for Signature:</td>
+		<td>
+		<textarea name="privateKey" id="privatekey" cols="50" rows="3"></textarea><br>
+		<input type="button" id="buttonretrieveprivatekey" value="Retrieve Private Key">
+		</td>
 		</tr>
 		<tr>
 		<td>Request Cloud Name:</td><td><input type="checkbox" name="requestCloudName"></td>
