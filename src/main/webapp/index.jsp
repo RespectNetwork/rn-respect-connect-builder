@@ -46,7 +46,12 @@
 			);
 		}
 
-		function clickbuildlinkcontracttemplateaddress() {
+		function clickbuildlinkcontracttemplateaddresssingleton() {
+
+			$('#linkcontracttemplateaddress').val("{$from}" + $('#requestingparty').val() + "+registration" + "$do");
+		}
+
+		function clickbuildlinkcontracttemplateaddresscollection() {
 
 			$('#linkcontracttemplateaddress').val("{$from}" + $('#requestingparty').val() + "+registration" + "[$do]" + "!:uuid:" + xdi.util.guid());
 		}
@@ -74,21 +79,7 @@
 			);
 		}
 
-		function clickbuildxdi() {
-
-			$.ajax({
-
-				url: "BuildMessageXDI?" + $('#form').serialize(),
-				type: 'post',
-				success: function(data) {
-					var text = JSON.stringify(data, null, "  ");
-					$('#messagexdiresult').text(text);
-				},
-				error: function(data) {
-					var text = "error: " + JSON.stringify(data, null, "  ");
-					$('#messagexdiresult').text(text);
-				}
-			});
+		function clickbuildlinkcontracttemplatexdi() {
 
 			$.ajax({
 
@@ -99,8 +90,134 @@
 					$('#linkcontracttemplatexdiresult').text(text);
 				},
 				error: function(data) {
-					var text = "error: " + JSON.stringify(data, null, "  ");
+					var text = "error: " + data.statusText;
 					$('#linkcontracttemplatexdiresult').text(text);
+				}
+			});
+		}
+
+		function clickdeletelinkcontracttemplatexdi() {
+
+			var message = xdi.message($('#requestingparty').val());
+			message.toAddress("(" + $('#requestingparty').val() + ")");
+			message.linkContract("$do");
+			message.secretToken($('#secrettoken').val());
+			message.operation("$del", $('#linkcontracttemplateaddress').val());
+
+			message.send(
+
+				$('#xdiendpoint').val(),
+				function(response) {
+					alert("Link Contract Template has been successfully deleted.");
+				},
+				function(errorText) {
+					alert(errorText);
+				}
+			);
+		}
+
+		function clickinstalllinkcontracttemplatexdi() {
+
+			var graph = xdi.graph();
+			graph.deserializeXDIJSON($('#linkcontracttemplatexdiresult').text());
+
+			var statements = graph.statements();
+
+			var message = xdi.message($('#requestingparty').val());
+			message.toAddress("(" + $('#requestingparty').val() + ")");
+			message.linkContract("$do");
+			message.secretToken($('#secrettoken').val());
+			
+			for (var i in statements) message.operation("$set", statements[i]);
+
+			message.send(
+
+				$('#xdiendpoint').val(),
+				function(response) {
+					alert("Link Contract Template has been successfully installed.");
+				},
+				function(errorText) {
+					alert(errorText);
+				}
+			);
+		}
+
+		function clickbuildmetalinkcontractxdi() {
+
+			$.ajax({
+
+				url: "BuildMetaLinkContractXDI?" + $('#form').serialize(),
+				type: 'post',
+				success: function(data) {
+					var text = JSON.stringify(data, null, "  ");
+					$('#metalinkcontractxdiresult').text(text);
+				},
+				error: function(data) {
+					var text = "error: " + data.statusText;
+					$('#metalinkcontractxdiresult').text(text);
+				}
+			});
+		}
+
+		function clickdeletemetalinkcontractxdi() {
+
+			var message = xdi.message($('#requestingparty').val());
+			message.toAddress("(" + $('#requestingparty').val() + ")");
+			message.linkContract("$do");
+			message.secretToken($('#secrettoken').val());
+			message.operation("$del", $('#metalinkcontractaddress').val());
+
+			message.send(
+
+				$('#xdiendpoint').val(),
+				function(response) {
+					alert("Link Contract Template has been successfully deleted.");
+				},
+				function(errorText) {
+					alert(errorText);
+				}
+			);
+		}
+
+		function clickinstallmetalinkcontractxdi() {
+
+			var graph = xdi.graph();
+			graph.deserializeXDIJSON($('#metalinkcontractxdiresult').text());
+
+			var statements = graph.statements();
+
+			var message = xdi.message($('#requestingparty').val());
+			message.toAddress("(" + $('#requestingparty').val() + ")");
+			message.linkContract("$do");
+			message.secretToken($('#secrettoken').val());
+			
+			for (var i in statements) message.operation("$set", statements[i]);
+
+			message.send(
+
+				$('#xdiendpoint').val(),
+				function(response) {
+					alert("Link Contract Template has been successfully installed.");
+				},
+				function(errorText) {
+					alert(errorText);
+				}
+			);
+		}
+
+		function clickbuildmessagexdi() {
+
+			$.ajax({
+
+				url: "BuildMessageXDI?" + $('#form').serialize(),
+				type: 'post',
+				success: function(data) {
+					var text = JSON.stringify(data, null, "  ");
+					$('#messagexdiresult').text(text);
+				},
+				error: function(data) {
+					var text = "error: " + data.statusText;
+					$('#messagexdiresult').text(text);
 				}
 			});
 		}
@@ -123,30 +240,27 @@
 					$('#messagehtmlresult').text(text);
 				},
 				error: function(data) {
-					var text = "error: " + JSON.stringify(data, null, "  ");
+					var text = "error: " + data.statusText;
 					$('#messagehtmlresult').text(text);
 				}
 			});
-		}
-
-		function clickinstalllinkcontracttemplatexdi() {
-
-		}
-
-		function clickinstallmetalinkcontractxdi() {
-		
 		}
 
 		$(document).ready(function() {
 
 			$("#buttondiscovercloudnumberfromprod").on("click", clickdiscovercloudnumberfromprod);
 			$("#buttondiscovercloudnumberfromote").on("click", clickdiscovercloudnumberfromote);
-			$("#buttonbuildlinkcontracttemplateaddress").on("click", clickbuildlinkcontracttemplateaddress);
+			$("#buttonbuildlinkcontracttemplateaddresssingleton").on("click", clickbuildlinkcontracttemplateaddresssingleton);
+			$("#buttonbuildlinkcontracttemplateaddresscollection").on("click", clickbuildlinkcontracttemplateaddresscollection);
 			$("#buttonretrieveprivatekey").on("click", clickretrieveprivatekey);
-			$("#buttonbuildxdi").on("click", clickbuildxdi);
-			$("#buttonbuildmessagehtml").on("click", clickbuildmessagehtml);
+			$("#buttonbuildlinkcontracttemplatexdi").on("click", clickbuildlinkcontracttemplatexdi);
+			$("#buttondeletelinkcontracttemplatexdi").on("click", clickdeletelinkcontracttemplatexdi);
 			$("#buttoninstalllinkcontracttemplatexdi").on("click", clickinstalllinkcontracttemplatexdi);
+			$("#buttonbuildmetalinkcontractxdi").on("click", clickbuildmetalinkcontractxdi);
+			$("#buttondeletemetalinkcontractxdi").on("click", clickdeletemetalinkcontractxdi);
 			$("#buttoninstallmetalinkcontractxdi").on("click", clickinstallmetalinkcontractxdi);
+			$("#buttonbuildmessagexdi").on("click", clickbuildmessagexdi);
+			$("#buttonbuildmessagehtml").on("click", clickbuildmessagehtml);
 		});
 
 	</script>
@@ -172,7 +286,7 @@
 
 	<% } %>
 
-	<h1>Step 1: Build Message XDI and Link Contract Template XDI</h1>
+	<h1>Step 1: Basic Information about the Requesting Party</h1>
 
 		<div class="step">
 
@@ -190,7 +304,8 @@
 		<td>Address of Link Contract Template:</td>
 		<td>
 		<input type="text" name="linkContractTemplateAddress" id="linkcontracttemplateaddress" size="80"><br>
-		<input type="button" id="buttonbuildlinkcontracttemplateaddress" value="Build Link Contract Template Address">
+		<input type="button" id="buttonbuildlinkcontracttemplateaddresssingleton" value="Build Singleton Link Contract Template Address">
+		<input type="button" id="buttonbuildlinkcontracttemplateaddresscollection" value="Build Collection Link Contract Template Address">
 		</td>
 		</tr>
 		<tr>
@@ -211,41 +326,85 @@
 		</tr>
 		</table>
 
-		<p><input type="button" id="buttonbuildxdi" value="Build Message XDI and Link Contract Template XDI"></p>
+		</div>
+
+	<h1>Step 2: Build and Install XDI Link Contract Template</h1>
+
+		<div class="step">
+
+		<p><input type="button" id="buttonbuildlinkcontracttemplatexdi" value="Build XDI Link Contract Template"></p>
 	
 		<div style="display: table; border-spacing: 10px;">
 		<div style="display: table-row;">
-		<div style="display: table-cell;" class="messagexdiheading">
-			Message XDI
-		</div>
 		<div style="display: table-cell;" class="linkcontracttemplatexdiheading">
-			Link Contract Template XDI
+			XDI Link Contract Template
 		</div>
 		</div>
 		<div style="display: table-row;">
-		<div style="display: table-cell; width: 600px; max-width: 600px;" class="result">
-			<div id="messagexdiresult"></div>
-		</div>
 		<div style="display: table-cell; width: 600px; max-width: 600px;" class="result">
 			<div id="linkcontracttemplatexdiresult"></div>
 		</div>
 		</div>
 		</div>
 
+		<p><input type="button" id="buttondeletelinkcontracttemplatexdi" value="Delete Old XDI Link Contract Template"></p>
+		<p><input type="button" id="buttoninstalllinkcontracttemplatexdi" value="Install XDI Link Contract Template"></p>
+
 		</div>
 
-	<h1>Step 2: Install Message HTML on your website</h1>
+	<h1>Step 3: Build and Install XDI Meta Link Contract</h1>
 
 		<div class="step">
 
-		<table cellspacing="0" cellpadding="5" border="0">
-		<tr>
-		<td>Return URL:</td><td><input type="text" name="returnUrl" size="80" value="https://yourwebsite.com/returnurl.html"></td>
-		</tr>
-		</table>
+		<p><input type="button" id="buttonbuildmetalinkcontractxdi" value="Build XDI Meta Link Contract"></p>
+	
+		<div style="display: table; border-spacing: 10px;">
+		<div style="display: table-row;">
+		<div style="display: table-cell;" class="metalinkcontractxdiheading">
+			XDI Meta Link Contract
+		</div>
+		</div>
+		<div style="display: table-row;">
+		<div style="display: table-cell; width: 600px; max-width: 600px;" class="result">
+			<div id="metalinkcontractxdiresult"></div>
+		</div>
+		</div>
+		</div>
+
+		<p><input type="button" id="buttondeletemetalinkcontractxdi" value="Delete Old XDI Meta Link Contract"></p>
+		<p><input type="button" id="buttoninstallmetalinkcontractxdi" value="Install XDI Meta Link Contract"></p>
+
+		</div>
+
+	<h1>Step 4: Build XDI Message</h1>
+
+		<div class="step">
+
+		<p><input type="button" id="buttonbuildmessagexdi" value="Build XDI Message"></p>
+	
+		<div style="display: table; border-spacing: 10px;">
+		<div style="display: table-row;">
+		<div style="display: table-cell;" class="linkcontracttemplatexdiheading">
+			XDI Message
+		</div>
+		</div>
+		<div style="display: table-row;">
+		<div style="display: table-cell; width: 600px; max-width: 600px;" class="result">
+			<div id="messagexdiresult"></div>
+		</div>
+		</div>
+		</div>
+
+		</div>
+
+	<h1>Step 5: Install Message HTML on your Website</h1>
+
+		<div class="step">
+
+		<p>Return URL: <input type="text" name="returnUrl" size="80" value="https://yourwebsite.com/returnurl.html"></p>
 
 		<p><input type="button" id="buttonbuildmessagehtml" value="Build Message HTML"></p>
-	
+
 		<div style="display: table; border-spacing: 10px;">
 		<div style="display: table-row;">
 		<div style="display: table-cell;" class="messagehtmlheading">
@@ -258,45 +417,17 @@
 		</div>
 		</div>
 		</div>
-	
+
 		</div>
 
-	<h1>Step 3: Install Link Contract Template XDI in your Cloud</h1>
-
-		<div class="step">
-		
-		<table cellspacing="0" cellpadding="5" border="0">
-		<tr>
-		<td>Secret Token:</td><td><input type="text" name="secretToken" size="80"></td>
-		</tr>
-		</table>
-
-		<p><input type="button" id="buttoninstalllinkcontracttemplatexdi" value="Install Link Contract Template XDI"></p>
-		
-		</div>
-	
-	<h1>Step 4: Install Meta Link Contract XDI in your Cloud</h1>
-
-		<div class="step">
-		
-		<table cellspacing="0" cellpadding="5" border="0">
-		<tr>
-		<td>Secret Token:</td><td><input type="text" name="secretToken" size="80"></td>
-		</tr>
-		</table>
-		
-		<p><input type="button" id="buttoninstallmetalinkcontractxdi" value="Install Meta Link Contract XDI"></p>
-		
-		</div>
-	
-	<h1>Step 5: Install and integrate the Respect Connect SDK with your Website</h1>
+	<h1>Step 6: Install and integrate the Respect Connect SDK with your Website</h1>
 
 		<div class="step">
 
 		<p>See Respect Connect SDK on Github</p>
-		
+
 		<p><a href="https://github.com/RespectNetwork/sdk-respect-connect">https://github.com/RespectNetwork/sdk-respect-connect</a></p>
-		
+
 		</div>
 
 	</div>	

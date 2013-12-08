@@ -32,4 +32,15 @@
 		<url-pattern>/BuildLinkContractTemplateXDI</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<description></description>
+		<display-name>BuildMetaLinkContractXDI</display-name>
+		<servlet-name>BuildMetaLinkContractXDI</servlet-name>
+		<servlet-class>net.respectnetwork.respectconnect.builder.BuildMetaLinkContractXDI</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BuildMetaLinkContractXDI</servlet-name>
+		<url-pattern>/BuildMetaLinkContractXDI</url-pattern>
+	</servlet-mapping>
+
 </web-app>

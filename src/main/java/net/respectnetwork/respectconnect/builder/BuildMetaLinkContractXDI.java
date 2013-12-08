@@ -32,7 +32,7 @@ import xdi2.core.io.writers.XDIJSONWriter;
 import xdi2.core.xri3.XDI3Segment;
 import xdi2.core.xri3.XDI3Statement;
 
-public class BuildLinkContractTemplateXDI extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
+public class BuildMetaLinkContractXDI extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
 
 	private static final long serialVersionUID = -2033109040103002340L;
 
