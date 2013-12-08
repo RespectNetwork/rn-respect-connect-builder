@@ -76,19 +76,27 @@ div.result div {
 	white-space: pre;
 }
 
-div.messagexdiheading {
-	font-size: 1.5em;
-	font-weight: bold;
-	font-color: white;
-	background-color: #f15e22;
-	padding: 10px;
-}
-
 div.linkcontracttemplatexdiheading {
 	font-size: 1.5em;
 	font-weight: bold;
 	font-color: white;
 	background-color: #1a709b;
+	padding: 10px;
+}
+
+div.metalinkcontractxdiheading {
+	font-size: 1.5em;
+	font-weight: bold;
+	font-color: white;
+	background-color: #1a709b;
+	padding: 10px;
+}
+
+div.messagexdiheading {
+	font-size: 1.5em;
+	font-weight: bold;
+	font-color: white;
+	background-color: #f15e22;
 	padding: 10px;
 }
 
