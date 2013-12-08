@@ -61,6 +61,11 @@ public class BuildLinkContractTemplateXDI extends javax.servlet.http.HttpServlet
 
 		XDI3Segment linkContractTemplateAddress = XDI3Segment.create(linkContractTemplateAddressString);
 
+		if (linkContractTemplateAddress == null) {
+			
+			throw new ServletException("No link contract template address.");
+		}
+		
 		boolean requestCloudName = "on".equals(requestCloudNameString);
 
 		String[] requestAttributesStrings = requestAttributesString.split("\n");
