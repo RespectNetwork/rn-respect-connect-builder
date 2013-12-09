@@ -18,8 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 
 import xdi2.core.ContextNode;
+import xdi2.core.Graph;
 import xdi2.core.constants.XDILinkContractConstants;
-import xdi2.core.features.linkcontracts.LinkContract;
+import xdi2.core.features.linkcontracts.LinkContractTemplate;
 import xdi2.core.features.linkcontracts.policy.PolicyAnd;
 import xdi2.core.features.linkcontracts.policy.PolicyRoot;
 import xdi2.core.features.linkcontracts.policy.PolicyUtil;
@@ -93,23 +94,26 @@ public class BuildLinkContractTemplateXDI extends javax.servlet.http.HttpServlet
 
 		// create link contract template XDI
 
-		ContextNode linkContractTemplateContextNode = MemoryGraphFactory.getInstance().openGraph().setDeepContextNode(linkContractTemplateAddress);
+		Graph graph = MemoryGraphFactory.getInstance().openGraph();
+		ContextNode linkContractTemplateContextNode = graph.setDeepContextNode(linkContractTemplateAddress);
 
-		LinkContract linkContract = LinkContract.fromXdiEntity(XdiAbstractEntity.fromContextNode(linkContractTemplateContextNode));
+		LinkContractTemplate linkContractTemplate = LinkContractTemplate.fromXdiEntity(XdiAbstractEntity.fromContextNode(linkContractTemplateContextNode));
 
-		PolicyRoot policyRoot = linkContract.getPolicyRoot(true);
+		PolicyRoot policyRoot = linkContractTemplate.getPolicyRoot(true);
 		PolicyAnd policyAnd = policyRoot.createAndPolicy(true);
 
 		PolicyUtil.createSenderIsOperator(policyAnd, requestingParty);
 		PolicyUtil.createSignatureValidOperator(policyAnd);
 
-		for (XDI3Segment requestAttribute : requestAttributes) linkContract.setPermissionTargetAddress(XDILinkContractConstants.XRI_S_GET, requestAttribute);
+		for (XDI3Segment requestAttribute : requestAttributes) linkContractTemplate.setPermissionTargetAddress(XDILinkContractConstants.XRI_S_GET, requestAttribute);
 
-		if (requestCloudName) linkContract.setPermissionTargetStatement(XDILinkContractConstants.XRI_S_GET, XDI3Statement.create("{$to}/$is$ref/{}"));
+		if (requestCloudName) linkContractTemplate.setPermissionTargetStatement(XDILinkContractConstants.XRI_S_GET, XDI3Statement.create("{$to}/$is$ref/{}"));
 
+		// sign
+		
 		try {
 
-			((KeyPairSignature) Signatures.setSignature(linkContract.getContextNode(), "sha", 256, "rsa", ((RSAKey) privateKey).getModulus().bitLength())).sign(privateKey);
+			((KeyPairSignature) Signatures.setSignature(linkContractTemplate.getContextNode(), "sha", 256, "rsa", ((RSAKey) privateKey).getModulus().bitLength())).sign(privateKey);
 		} catch (GeneralSecurityException ex) {
 
 			throw new ServletException(ex.getMessage(), ex);
@@ -122,7 +126,7 @@ public class BuildLinkContractTemplateXDI extends javax.servlet.http.HttpServlet
 		parameters.setProperty(XDIWriterRegistry.PARAMETER_PRETTY, "1");
 		XDIJSONWriter xdiWriter = (XDIJSONWriter) XDIWriterRegistry.forFormat("XDI/JSON", parameters);
 		StringWriter buffer = new StringWriter();
-		xdiWriter.write(linkContract.getContextNode().getGraph(), buffer);
+		xdiWriter.write(graph, buffer);
 		response.setContentType(XDIJSONWriter.MIME_TYPE.getMimeType());
 		response.getWriter().write(buffer.getBuffer().toString());
 	}   	  	    

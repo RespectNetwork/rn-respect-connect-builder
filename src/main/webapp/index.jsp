@@ -46,14 +46,18 @@
 			);
 		}
 
-		function clickbuildlinkcontracttemplateaddresssingleton() {
+		function clickbuildaddresssingleton() {
 
-			$('#linkcontracttemplateaddress').val("{$from}" + $('#requestingparty').val() + "+registration" + "$do");
+			$('#metalinkcontractaddress').val("{$to}" + $('#requestingparty').val() + "$from" + $('#templateid').val() + "$do");
+			$('#linkcontracttemplateaddress').val("{$from}" + $('#templateid').val() + "$do");
 		}
 
-		function clickbuildlinkcontracttemplateaddresscollection() {
+		function clickbuildaddresscollection() {
 
-			$('#linkcontracttemplateaddress').val("{$from}" + $('#requestingparty').val() + "+registration" + "[$do]" + "!:uuid:" + xdi.util.guid());
+			var guid = xdi.util.guid();
+
+			$('#metalinkcontractaddress').val("{$to}" + $('#requestingparty').val() + "$from" + $('#templateid').val() + "[$do]" + "!:uuid:" + guid);
+			$('#linkcontracttemplateaddress').val("{$from}" + $('#templateid').val() + "[$do]" + "!:uuid:" + guid);
 		}
 
 		function clickretrieveprivatekey() {
@@ -171,7 +175,7 @@
 
 				$('#xdiendpoint').val(),
 				function(response) {
-					alert("Link Contract Template has been successfully deleted.");
+					alert("Meta Link Contract has been successfully deleted.");
 				},
 				function(errorText) {
 					alert(errorText);
@@ -197,7 +201,7 @@
 
 				$('#xdiendpoint').val(),
 				function(response) {
-					alert("Link Contract Template has been successfully installed.");
+					alert("Meta Link Contract has been successfully installed.");
 				},
 				function(errorText) {
 					alert(errorText);
@@ -250,8 +254,8 @@
 
 			$("#buttondiscovercloudnumberfromprod").on("click", clickdiscovercloudnumberfromprod);
 			$("#buttondiscovercloudnumberfromote").on("click", clickdiscovercloudnumberfromote);
-			$("#buttonbuildlinkcontracttemplateaddresssingleton").on("click", clickbuildlinkcontracttemplateaddresssingleton);
-			$("#buttonbuildlinkcontracttemplateaddresscollection").on("click", clickbuildlinkcontracttemplateaddresscollection);
+			$("#buttonbuildaddresssingleton").on("click", clickbuildaddresssingleton);
+			$("#buttonbuildaddresscollection").on("click", clickbuildaddresscollection);
 			$("#buttonretrieveprivatekey").on("click", clickretrieveprivatekey);
 			$("#buttonbuildlinkcontracttemplatexdi").on("click", clickbuildlinkcontracttemplatexdi);
 			$("#buttondeletelinkcontracttemplatexdi").on("click", clickdeletelinkcontracttemplatexdi);
@@ -301,15 +305,19 @@
 		</td>
 		</tr>
 		<tr>
-		<td>Address of Link Contract Template:</td>
+		<td>Template ID for Link Contract Template<br>and Meta Link Contract:</td><td><input type="text" name="templateId" id="templateid" size="80" value="+registration"></td>
+		</tr>
+		<tr>
+		<td>Address of Link Contract Template<br>and Meta Link Contract:</td>
 		<td>
 		<input type="text" name="linkContractTemplateAddress" id="linkcontracttemplateaddress" size="80"><br>
-		<input type="button" id="buttonbuildlinkcontracttemplateaddresssingleton" value="Build Singleton Link Contract Template Address">
-		<input type="button" id="buttonbuildlinkcontracttemplateaddresscollection" value="Build Collection Link Contract Template Address">
+		<input type="text" name="metaLinkContractAddress" id="metalinkcontractaddress" size="80"><br>
+		<input type="button" id="buttonbuildaddresssingleton" value="Build Singleton Address">
+		<input type="button" id="buttonbuildaddresscollection" value="Build Collection Address">
 		</td>
 		</tr>
 		<tr>
-		<td>Secret Token:</td><td><input type="text" name="secretToken" id="secrettoken" size="80" value="bestbread"></td>
+		<td>Requesting Party Secret Token:</td><td><input type="text" name="secretToken" id="secrettoken" size="80" value="bestbread"></td>
 		</tr>
 		<tr>
 		<td>Private Key for Signature:</td>
