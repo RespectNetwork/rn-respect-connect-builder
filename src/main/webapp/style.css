@@ -20,21 +20,20 @@ form {
 }
 
 #header {
-	background-color: white;
+	background-color: #d0d0d0;
 	position: fixed;
 	left: 0px;
 	top: 0px;
 	padding: 10px;
 	width: 100%;
-	border-bottom: 5px solid black;
 }
 
 #applogo {
-	float: left;
 }
 
 #appname {
-	font-size: 12pt;
+	color: black;
+	font-size: 1.5em;
 	font-weight: bold;
 	padding-left: 20px;
 	padding-top: 40px;
@@ -55,6 +54,11 @@ div.step {
 input[type=text], textarea {
 	background-color: white;
 	border: 3px solid black;
+	padding: 5px;
+	font-family: Courier New, monospace;
+}
+
+input[type=button] {
 	padding: 5px;
 	font-family: Courier New, monospace;
 }

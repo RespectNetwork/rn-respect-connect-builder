@@ -58,14 +58,13 @@ public class BuildLinkContractTemplateXDI extends javax.servlet.http.HttpServlet
 
 		// set up parameters
 
+		if (requestingPartyString == null || requestingPartyString.trim().isEmpty()) throw new ServletException("No requesting party.");
+		if (linkContractTemplateAddressString == null || linkContractTemplateAddressString.trim().isEmpty()) throw new ServletException("No link contract template address.");
+		if (privateKeyString == null || privateKeyString.trim().isEmpty()) throw new ServletException("No private key.");
+
 		XDI3Segment requestingParty = XDI3Segment.create(requestingPartyString);
 
 		XDI3Segment linkContractTemplateAddress = XDI3Segment.create(linkContractTemplateAddressString);
-
-		if (linkContractTemplateAddress == null) {
-			
-			throw new ServletException("No link contract template address.");
-		}
 		
 		boolean requestCloudName = "on".equals(requestCloudNameString);
 

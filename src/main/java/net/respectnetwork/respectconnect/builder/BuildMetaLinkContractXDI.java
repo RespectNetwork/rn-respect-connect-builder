@@ -39,6 +39,9 @@ public class BuildMetaLinkContractXDI extends javax.servlet.http.HttpServlet imp
 
 		// set up parameters
 
+		if (linkContractTemplateAddressString == null || linkContractTemplateAddressString.trim().isEmpty()) throw new ServletException("No link contract template address.");
+		if (metaLinkContractAddressString == null || linkContractTemplateAddressString.trim().isEmpty()) throw new ServletException("No meta link contract address.");
+
 		XDI3Segment linkContractTemplateAddress = XDI3Segment.create(linkContractTemplateAddressString);
 		if (linkContractTemplateAddress == null) throw new ServletException("No link contract template address.");
 

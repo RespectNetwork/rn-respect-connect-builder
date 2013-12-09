@@ -14,7 +14,7 @@
 
 	<script type="text/javascript">
 
-		function clickdiscovercloudnumberfromprod() {
+		function clickdiscovercloudnumber(url) {
 
 			xdi.discovery(
 
@@ -26,24 +26,18 @@
 				function(errorText) {
 					$('#requestingparty').val(errorText);
 				},
-				"http://mycloud.neustar.biz:12220/"
+				url
 			);
+		}
+
+		function clickdiscovercloudnumberfromprod() {
+
+			return clickdiscovercloudnumber("http://mycloud.neustar.biz:12220/");
 		}
 
 		function clickdiscovercloudnumberfromote() {
 
-			xdi.discovery(
-
-				$('#requestingparty').val(),
-				function(discovery) {
-					$('#requestingparty').val(discovery.cloudNumber());
-					$('#xdiendpoint').val(discovery.xdiEndpoint());
-				},
-				function(errorText) {
-					$('#requestingparty').val(errorText);
-				},
-				"http://mycloud-ote.neustar.biz:12220/"
-			);
+			return clickdiscovercloudnumber("http://mycloud-ote.neustar.biz:12220/");
 		}
 
 		function clickbuildaddresssingleton() {
@@ -61,6 +55,9 @@
 		}
 
 		function clickretrieveprivatekey() {
+
+			if ($('#requestingparty').val() === "") { $("#privatekey").val("No requesting party."); return; }
+			if ($('#xdiendpoint').val() === "") { $("#privatekey").val("No XDI endpoint."); return; }
 
 			var message = xdi.message($('#requestingparty').val());
 			message.toAddress("(" + $('#requestingparty').val() + ")");
@@ -209,7 +206,7 @@
 			);
 		}
 
-		function clickbuildmessagexdi() {
+		function clickbuildmessagexdiandhtml(url) {
 
 			$.ajax({
 
@@ -224,9 +221,6 @@
 					$('#messagexdiresult').text(text);
 				}
 			});
-		}
-
-		function clickbuildmessagehtml() {
 
 			$.ajax({
 
@@ -236,8 +230,8 @@
 					var xdimessage = JSON.stringify(data);
 					var returnurl = $('#form input[name=returnUrl]').val();
 					var text = '';
-					text += '<form action="http://respectconnect.respectnetwork.net/respectconnect/" method="post">\n';
-					text += '<input type="image" src="http://respectconnect.respectnetwork.net/respectconnect/images/respectconnect.png">\n';
+					text += '<form action="' + url + '" method="post">\n';
+					text += '<input type="image" src="' + 'images/respectconnect.png">\n';
 					text += '<input type="hidden" name="xdimessage" value="' + _.escape(xdimessage) + '">\n';
 					text += '<input type="hidden" name="returnurl" value="' + _.escape(returnurl) + '">\n';
 					text += '</form>\n';
@@ -248,6 +242,16 @@
 					$('#messagehtmlresult').text(text);
 				}
 			});
+		}
+
+		function clickbuildmessagexdiandhtmlforprod(url) {
+
+			return clickbuildmessagexdiandhtml("https://respectconnect.respectnetwork.net/respectconnect/");
+		}
+
+		function clickbuildmessagexdiandhtmlforote(url) {
+
+			return clickbuildmessagexdiandhtml("https://respectconnect-dev.respectnetwork.net/respectconnect/");
 		}
 
 		$(document).ready(function() {
@@ -263,8 +267,8 @@
 			$("#buttonbuildmetalinkcontractxdi").on("click", clickbuildmetalinkcontractxdi);
 			$("#buttondeletemetalinkcontractxdi").on("click", clickdeletemetalinkcontractxdi);
 			$("#buttoninstallmetalinkcontractxdi").on("click", clickinstallmetalinkcontractxdi);
-			$("#buttonbuildmessagexdi").on("click", clickbuildmessagexdi);
-			$("#buttonbuildmessagehtml").on("click", clickbuildmessagehtml);
+			$("#buttonbuildmessagexdiandhtmlforprod").on("click", clickbuildmessagexdiandhtmlforprod);
+			$("#buttonbuildmessagexdiandhtmlforote").on("click", clickbuildmessagexdiandhtmlforote);
 		});
 
 	</script>
@@ -277,8 +281,14 @@
 
 	<div id="header">
 
+		<table>
+		<tr>
+		<td>
 		<img id="applogo" src="images/logo.png">
+		</td><td>
 		<span id="appname">Respect Connect Button Builder</span>
+		</tr>
+		</table>
 
 	</div>
 
@@ -336,6 +346,10 @@
 
 		</div>
 
+	<table cellpadding="10" width="100%">
+	<tr>
+	<td valign="top" width="50%">
+
 	<h1>Step 2: Build and Install XDI Link Contract Template</h1>
 
 		<div class="step">
@@ -349,7 +363,7 @@
 		</div>
 		</div>
 		<div style="display: table-row;">
-		<div style="display: table-cell; width: 600px; max-width: 600px;" class="result">
+		<div style="display: table-cell; width: 400px; max-width: 400px;" class="result">
 			<div id="linkcontracttemplatexdiresult"></div>
 		</div>
 		</div>
@@ -359,6 +373,8 @@
 		<p><input type="button" id="buttoninstalllinkcontracttemplatexdi" value="Install XDI Link Contract Template"></p>
 
 		</div>
+
+	</td><td valign="top" width="50%">
 
 	<h1>Step 3: Build and Install XDI Meta Link Contract</h1>
 
@@ -373,7 +389,7 @@
 		</div>
 		</div>
 		<div style="display: table-row;">
-		<div style="display: table-cell; width: 600px; max-width: 600px;" class="result">
+		<div style="display: table-cell; width: 400px; max-width: 400px;" class="result">
 			<div id="metalinkcontractxdiresult"></div>
 		</div>
 		</div>
@@ -384,20 +400,36 @@
 
 		</div>
 
-	<h1>Step 4: Build XDI Message</h1>
+	</td>
+	</tr>
+	</table>
+
+	<h1>Step 4: Build XDI Message and install Message HTML on your Website</h1>
 
 		<div class="step">
 
-		<p><input type="button" id="buttonbuildmessagexdi" value="Build XDI Message"></p>
+		<p>Return URL: <input type="text" name="returnUrl" size="80" value="https://yourwebsite.com/returnurl.html"></p>
+		<p>
+		<input type="button" id="buttonbuildmessagexdiandhtmlforprod" value="Build XDI Message and HTML for PROD">
+		<input type="button" id="buttonbuildmessagexdiandhtmlforote" value="Build XDI Message and HTML for OTE">
+		</p>
+
+		</div>
+
+	<table cellpadding="10" width="100%">
+	<tr>
+	<td valign="top" width="50%">
+
+		<div class="step">
 	
 		<div style="display: table; border-spacing: 10px;">
 		<div style="display: table-row;">
-		<div style="display: table-cell;" class="linkcontracttemplatexdiheading">
+		<div style="display: table-cell;" class="messagexdiheading">
 			XDI Message
 		</div>
 		</div>
 		<div style="display: table-row;">
-		<div style="display: table-cell; width: 600px; max-width: 600px;" class="result">
+		<div style="display: table-cell; width: 400px; max-width: 400px;" class="result">
 			<div id="messagexdiresult"></div>
 		</div>
 		</div>
@@ -405,13 +437,9 @@
 
 		</div>
 
-	<h1>Step 5: Install Message HTML on your Website</h1>
+	</td><td valign="top" width="50%">
 
 		<div class="step">
-
-		<p>Return URL: <input type="text" name="returnUrl" size="80" value="https://yourwebsite.com/returnurl.html"></p>
-
-		<p><input type="button" id="buttonbuildmessagehtml" value="Build Message HTML"></p>
 
 		<div style="display: table; border-spacing: 10px;">
 		<div style="display: table-row;">
@@ -420,7 +448,7 @@
 		</div>
 		</div>
 		<div style="display: table-row;">
-		<div style="display: table-cell; width: 1200px; max-width: 1200px;" class="result">
+		<div style="display: table-cell; width: 400px; max-width: 400px;" class="result">
 			<div id="messagehtmlresult"></div>
 		</div>
 		</div>
@@ -428,7 +456,11 @@
 
 		</div>
 
-	<h1>Step 6: Install and integrate the Respect Connect SDK with your Website</h1>
+	</td>
+	</tr>
+	</table>
+
+	<h1>Step 5: Install and integrate the Respect Connect SDK with your Website</h1>
 
 		<div class="step">
 
