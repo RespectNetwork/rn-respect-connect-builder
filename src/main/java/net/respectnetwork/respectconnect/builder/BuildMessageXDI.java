@@ -22,6 +22,7 @@ import xdi2.core.io.XDIWriterRegistry;
 import xdi2.core.io.writers.XDIJSONWriter;
 import xdi2.core.xri3.XDI3Segment;
 import xdi2.core.xri3.XDI3Statement;
+import xdi2.core.xri3.XDI3SubSegment;
 import xdi2.messaging.Message;
 import xdi2.messaging.MessageEnvelope;
 
@@ -29,7 +30,7 @@ public class BuildMessageXDI extends javax.servlet.http.HttpServlet implements j
 
 	private static final long serialVersionUID = 2395655719203845949L;
 
-	public static final XDI3Segment TO_PEER_ROOT_XRI = XDI3Segment.create("{$to}");
+	public static final XDI3SubSegment TO_PEER_ROOT_XRI = XDI3SubSegment.create("{$to}");
 	public static final XDI3Segment MESSAGE_TYPE = XDI3Segment.create("$connect[$v]#0$xdi[$v]#1$msg");
 	public static final XDI3Segment OPERATION_XRI = XDI3Segment.create("$set{$do}");
 
