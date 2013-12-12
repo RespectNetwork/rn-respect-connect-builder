@@ -111,7 +111,7 @@ public class BuildMessageXDI extends javax.servlet.http.HttpServlet implements j
 		Properties parameters = new Properties();
 		parameters.setProperty(XDIWriterRegistry.PARAMETER_INNER, "1");
 		parameters.setProperty(XDIWriterRegistry.PARAMETER_PRETTY, "1");
-		XDIWriter xdiWriter = (XDIJSONWriter) XDIWriterRegistry.forFormat("XDI/JSON", parameters);
+		XDIWriter xdiWriter = XDIWriterRegistry.forFormat("XDI/JSON", parameters);
 		StringWriter buffer = new StringWriter();
 		xdiWriter.write(message.getMessageEnvelope().getGraph(), buffer);
 		response.setContentType(XDIJSONWriter.MIME_TYPE.getMimeType());
