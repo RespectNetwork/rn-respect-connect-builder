@@ -130,6 +130,7 @@
 			message.secretToken($('#secrettoken').val());
 			
 			for (var i in statements) message.operation("$set", statements[i]);
+			message.operation("$set", xdi.parser.parseStatement("$public$do/$get/" + $('#linkcontracttemplateaddress').val()));
 
 			message.send(
 
