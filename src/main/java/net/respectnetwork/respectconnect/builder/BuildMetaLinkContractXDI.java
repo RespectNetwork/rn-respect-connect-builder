@@ -16,6 +16,7 @@ import xdi2.core.features.linkcontracts.LinkContractTemplate;
 import xdi2.core.features.linkcontracts.MetaLinkContract;
 import xdi2.core.features.nodetypes.XdiAbstractEntity;
 import xdi2.core.impl.memory.MemoryGraphFactory;
+import xdi2.core.io.XDIWriter;
 import xdi2.core.io.XDIWriterRegistry;
 import xdi2.core.io.writers.XDIJSONWriter;
 import xdi2.core.xri3.XDI3Segment;
@@ -75,7 +76,7 @@ public class BuildMetaLinkContractXDI extends javax.servlet.http.HttpServlet imp
 		Properties parameters = new Properties();
 		parameters.setProperty(XDIWriterRegistry.PARAMETER_INNER, "0");
 		parameters.setProperty(XDIWriterRegistry.PARAMETER_PRETTY, "1");
-		XDIJSONWriter xdiWriter = (XDIJSONWriter) XDIWriterRegistry.forFormat("XDI/JSON", parameters);
+		XDIWriter xdiWriter = XDIWriterRegistry.forFormat("XDI/JSON", parameters);
 		StringWriter buffer = new StringWriter();
 		xdiWriter.write(graph, buffer);
 		response.setContentType(XDIJSONWriter.MIME_TYPE.getMimeType());
