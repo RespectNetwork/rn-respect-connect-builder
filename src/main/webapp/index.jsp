@@ -42,8 +42,8 @@
 
 		function clickbuildaddresssingleton() {
 
-			$('#metalinkcontractaddress').val("{$to}" + $('#requestingparty').val() + "$from" + $('#templateid').val() + "$do");
-			$('#linkcontracttemplateaddress').val("{$from}" + $('#templateid').val() + "$do");
+			$('#metalinkcontractaddress').val($('#requestingparty').val() + "{$to}" + $('#requestingparty').val() + "$from" + $('#templateid').val() + "$do");
+			$('#linkcontracttemplateaddress').val($('#requestingparty').val() + "{$from}" + $('#templateid').val() + "$do");
 		}
 
 		function clickbuildaddresscollection() {
@@ -307,7 +307,7 @@
 
 		<table cellspacing="0" cellpadding="5" border="0">
 		<tr>
-		<td>Requesting Party:</td>
+		<td valign="top">Requesting Party:</td>
 		<td>
 		<input type="text" name="requestingParty" id="requestingparty" size="80" value="@acmebread">
 		<input type="hidden" name="xdiEndpoint" id="xdiendpoint"><br>
@@ -316,16 +316,23 @@
 		</td>
 		</tr>
 		<tr>
-		<td>Template ID for Link Contract Template<br>and Meta Link Contract:</td><td><input type="text" name="templateId" id="templateid" size="80" value="+registration"></td>
+		<td>Template ID:</td><td><input type="text" name="templateId" id="templateid" size="80" value="+registration"></td>
 		</tr>
 		<tr>
-		<td>Address of Link Contract Template<br>and Meta Link Contract:</td>
+		<td valign="top">Address of Link Contract Template:</td>
 		<td>
-		<input type="text" name="linkContractTemplateAddress" id="linkcontracttemplateaddress" size="80"><br>
-		<input type="text" name="metaLinkContractAddress" id="metalinkcontractaddress" size="80"><br>
+		<textarea name="linkContractTemplateAddress" id="linkcontracttemplateaddress" rows="3" cols="80"></textarea><br>
+		</td>
+		</tr>
+		<tr>
+		<td valign="top">Address of Meta Link Contract:</td>
+		<td>
+		<textarea name="metaLinkContractAddress" id="metalinkcontractaddress" rows="3" cols="80"></textarea><br>
 		<input type="button" id="buttonbuildaddresssingleton" value="Build Singleton Address">
 		<input type="button" id="buttonbuildaddresscollection" value="Build Collection Address">
 		</td>
+		</tr>
+		<tr>
 		</tr>
 		<tr>
 		<td>Requesting Party Secret Token:</td><td><input type="text" name="secretToken" id="secrettoken" size="80" value="bestbread"></td>
