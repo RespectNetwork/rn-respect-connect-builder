@@ -50,8 +50,8 @@
 
 			var guid = xdi.util.guid();
 
-			$('#metalinkcontractaddress').val("{$to}" + $('#requestingparty').val() + "$from" + $('#templateid').val() + "[$do]" + "!:uuid:" + guid);
-			$('#linkcontracttemplateaddress').val("{$from}" + $('#templateid').val() + "[$do]" + "!:uuid:" + guid);
+			$('#metalinkcontractaddress').val($('#requestingparty').val() + "{$to}" + $('#requestingparty').val() + "$from" + $('#templateid').val() + "[$do]" + "!:uuid:" + guid);
+			$('#linkcontracttemplateaddress').val($('#requestingparty').val() + "{$from}" + $('#templateid').val() + "[$do]" + "!:uuid:" + guid);
 		}
 
 		function clickretrieveprivatekey() {
