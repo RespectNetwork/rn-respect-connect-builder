@@ -42,7 +42,7 @@
 
 		function clickbuildaddresssingleton() {
 
-			$('#metalinkcontractaddress').val($('#requestingparty').val() + "{$to}" + $('#requestingparty').val() + "$from" + $('#templateid').val() + "$do");
+			$('#metalinkcontractaddress').val($('#requestingparty').val() + "{$to}" + $('#templateid').val() + "$do");
 			$('#linkcontracttemplateaddress').val($('#requestingparty').val() + "{$from}" + $('#templateid').val() + "$do");
 		}
 
@@ -50,7 +50,7 @@
 
 			var guid = xdi.util.guid();
 
-			$('#metalinkcontractaddress').val($('#requestingparty').val() + "{$to}" + $('#requestingparty').val() + "$from" + $('#templateid').val() + "[$do]" + "!:uuid:" + guid);
+			$('#metalinkcontractaddress').val($('#requestingparty').val() + "{$to}" + $('#templateid').val() + "[$do]" + "!:uuid:" + guid);
 			$('#linkcontracttemplateaddress').val($('#requestingparty').val() + "{$from}" + $('#templateid').val() + "[$do]" + "!:uuid:" + guid);
 		}
 
