@@ -26,6 +26,7 @@ import xdi2.core.xri3.XDI3Statement;
 import xdi2.core.xri3.XDI3SubSegment;
 import xdi2.messaging.Message;
 import xdi2.messaging.MessageEnvelope;
+import xdi2.messaging.Operation;
 
 public class BuildMessageXDI extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
 
@@ -33,7 +34,8 @@ public class BuildMessageXDI extends javax.servlet.http.HttpServlet implements j
 
 	public static final XDI3SubSegment TO_PEER_ROOT_XRI = XDI3SubSegment.create("{$to}");
 	public static final XDI3Segment MESSAGE_TYPE = XDI3Segment.create("$connect[$v]#0$xdi[$v]#1$msg");
-	public static final XDI3Segment OPERATION_XRI = XDI3Segment.create("$set{$do}");
+	public static final XDI3Segment OPERATION_XRI = XDI3Segment.create("$set$do");
+	public static final XDI3Segment PARAMETER_RETURN_URL_XRI = XDI3Segment.create("<+return><$uri>");
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -49,6 +51,7 @@ public class BuildMessageXDI extends javax.servlet.http.HttpServlet implements j
 		String privateKeyString = request.getParameter("privateKey");
 		String requestCloudNameString = request.getParameter("requestCloudName");
 		String requestAttributesString = request.getParameter("requestAttributes");
+		String returnUrlString = request.getParameter("returnUrl");
 
 		// set up parameters
 
@@ -88,11 +91,11 @@ public class BuildMessageXDI extends javax.servlet.http.HttpServlet implements j
 		// create message HTML
 
 		Message message = new MessageEnvelope().createMessage(requestingParty);
-
 		message.setToPeerRootXri(TO_PEER_ROOT_XRI);
 		message.setMessageType(MESSAGE_TYPE);
 
-		message.createOperation(OPERATION_XRI, linkContractTemplateAddress);
+		Operation operation = message.createOperation(OPERATION_XRI, linkContractTemplateAddress);
+		operation.setParameter(PARAMETER_RETURN_URL_XRI, returnUrlString);
 
 		for (XDI3Segment requestAttribute : requestAttributes) message.createGetOperation(requestAttribute);
 

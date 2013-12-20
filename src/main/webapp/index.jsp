@@ -234,7 +234,6 @@
 					text += '<form action="' + url + '" method="post">\n';
 					text += '<input type="image" src="' + 'images/respectconnect.png">\n';
 					text += '<input type="hidden" name="xdimessage" value="' + _.escape(xdimessage) + '">\n';
-					text += '<input type="hidden" name="returnurl" value="' + _.escape(returnurl) + '">\n';
 					text += '</form>\n';
 					$('#messagehtmlresult').text(text);
 				},
