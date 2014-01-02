@@ -287,6 +287,7 @@
 		<img id="applogo" src="images/logo.png">
 		</td><td>
 		<span id="appname">Respect Connect Button Builder</span>
+		</td>
 		</tr>
 		</table>
 
